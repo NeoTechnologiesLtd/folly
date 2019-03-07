@@ -18,35 +18,46 @@
 #include <folly/Format.h>
 #include <glog/logging.h>
 
-namespace folly {
-namespace ssl {
+namespace folly
+{
+namespace ssl
+{
 
-namespace ssl_options_detail {
-void logDfatal(std::exception const& e) {
+namespace ssl_options_detail
+{
+void logDfatal(std::exception const &e)
+{
   LOG(DFATAL) << exceptionStr(e);
 }
 } // namespace ssl_options_detail
 
-constexpr std::array<const char*, 12> SSLCommonOptions::kCipherList;
-constexpr std::array<const char*, 8> SSLCommonOptions::kSignatureAlgorithms;
-constexpr std::array<const char*, 12> SSLServerOptions::kCipherList;
+constexpr __attribute((used)) std::array<const char *, 12> SSLCommonOptions::kCipherList;
+constexpr __attribute((used)) std::array<const char *, 8> SSLCommonOptions::kSignatureAlgorithms;
+constexpr __attribute((used)) std::array<const char *, 12> SSLServerOptions::kCipherList;
 
-void SSLCommonOptions::setClientOptions(SSLContext& ctx) {
+void SSLCommonOptions::setClientOptions(SSLContext &ctx)
+{
 #ifdef SSL_MODE_HANDSHAKE_CUTTHROUGH
   ctx.enableFalseStart();
 #endif
 
   X509VerifyParam param(X509_VERIFY_PARAM_new());
   X509_VERIFY_PARAM_set_flags(param.get(), X509_V_FLAG_X509_STRICT);
-  try {
+  try
+  {
     ctx.setX509VerifyParam(param);
-  } catch (std::runtime_error const& e) {
+  }
+  catch (std::runtime_error const &e)
+  {
     LOG(DFATAL) << exceptionStr(e);
   }
 
-  try {
+  try
+  {
     ctx.setClientECCurvesList({"P-256", "P-384"});
-  } catch (std::runtime_error const& e) {
+  }
+  catch (std::runtime_error const &e)
+  {
     LOG(DFATAL) << exceptionStr(e);
   }
 
